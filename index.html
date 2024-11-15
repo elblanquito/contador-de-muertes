@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lectura en Tiempo Real</title>
+  <style>
+    #content { white-space: pre-wrap; font-family: monospace; }
+  </style>
+</head>
+<body>
+  <h1>Contenido del archivo en tiempo real</h1>
+  <div id="content"></div>
+  <script>
+    async function fetchData() {
+      const response = await fetch('/data');
+      const text = await response.text();
+      document.getElementById('content').textContent = text;
+    }
+    setInterval(fetchData, 1000); // Llama a fetchData cada segundo
+    fetchData(); // Llamada inicial para cargar el contenido
+  </script>
+</body>
+</html>
