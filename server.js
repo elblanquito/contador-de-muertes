@@ -27,11 +27,11 @@ keyboardListener.addListener((e) => {
     if (e.name === "0") {
       contador++;
       actualizarArchivo();
-      console.log(`Contador incrementado: ${contador}`);
-    } else if (e.name === "9") {
+      console.log(`Contador: ${contador}`);
+    } else if (e.name === "9" && contador > 0) {
       contador--;
       actualizarArchivo();
-      console.log(`Contador decrementado: ${contador}`);
+      console.log(`Contador: ${contador}`);
     }
   }
 });

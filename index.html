@@ -10,6 +10,8 @@
     <h1 class="titulo">Muertes</h1>
     <div id="content">0</div>
   </div>
+
+  <div class="rgb-border"></div>
   
 </body>
 
@@ -28,43 +30,87 @@
     line-height: 1.0;
     }
     .cont{
-      
+      background-color: none;
       
       height: 100vh;
       display: flex;
     }
     .box{
       background-color: rgb(17, 0, 31);
-      border: solid 10px rgb(104, 70, 255) ;
-      border-radius: 30px;
+      border: 15px solid;
+      border-image: linear-gradient(45deg, rgb(255, 0, 0), rgb(0, 255, 0), rgb(0, 0, 255)) 1;
       margin: auto;
       width: min-content;
       padding: 20px 50px;
+      display: flex;
+      flex-direction: column;
+      animation: rgb-animation linear 3s infinite;
     }
 
     .titulo{
       font-size: 100px;
       width: max-content;
-      
     }
 
     #content{
       font-size: 100px;
       font-weight: bolder;
+      transition: all ease 0.5s;
+      width: min-content;
+      margin: auto;
+    }
+    #content.animate {
+    animation: pop 0.4s ease;
+  }
+
+    @keyframes pop {
+    0% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.5) rotate(10deg);
+    }
+    100% {
+      transform: scale(1);
+    }
+  }
+
+    @keyframes rgb-animation {
+      0% {
+        border-image-source: linear-gradient(45deg, rgb(104, 70, 255), rgb(104, 70, 255), rgb(206, 43, 255));
+      }
+      33% {
+        border-image-source: linear-gradient(45deg, rgb(104, 70, 255), rgb(206, 43, 255), rgb(104, 70, 255));
+      }
+      66% {
+        border-image-source: linear-gradient(45deg, rgb(206, 43, 255), rgb(104, 70, 255), rgb(104, 70, 255));
+      }
+      100% {
+        border-image-source: linear-gradient(45deg, rgb(104, 70, 255), rgb(104, 70, 255), rgb(206, 43, 255));
+      }
     }
     
   </style>
 
   <script>
+    let previousValue = null;
     async function fetchData() {
       const response = await fetch('/data');
       const text = await response.text();
-      document.getElementById('content').textContent = text;
-      if (isNaN(text)){
-        document.getElementById('content').textContent = "32";
-      }
+      const numero = document.getElementById('content');
+      
+      if (text !== previousValue) {
+      previousValue = text;
+      numero.textContent = isNaN(text) ? "-" : text;
+
+      // Añade la clase para la animación
+      numero.classList.add('animate');
+
+      // Elimina la clase después de la animación para que pueda reutilizarse
+      setTimeout(() => numero.classList.remove('animate'), 400);
     }
-    setInterval(fetchData, 100); // Llama a fetchData cada segundo
+    }
+    setInterval(fetchData, 200); // Llama a fetchData cada segundo
     fetchData(); // Llamada inicial para cargar el contenido
   </script>
 
