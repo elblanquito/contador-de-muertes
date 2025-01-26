@@ -1,4 +1,3 @@
-// server.js
 const fs = require("fs");
 const http = require("http");
 const path = require("path");
@@ -44,14 +43,32 @@ const server = http.createServer((req, res) => {
     fs.createReadStream(path.join(__dirname, "index.html")).pipe(res);
   } else if (req.url === "/data") {
     // Servir el contenido del archivo .txt
-    res.writeHead(200, { "Content-Type": "text/plain" });
-    res.end(contador.toString());
+    res.writeHead(200, { "Content-Type": "application/json" });
+    res.end(JSON.stringify({ contador }));
   } else {
-    res.writeHead(404);
-    res.end("404 Not Found");
+    // Servir archivos estáticos (incluyendo los audios)
+    const filePath = path.join(__dirname, req.url);
+    fs.access(filePath, fs.constants.F_OK, (err) => {
+      if (!err) {
+        const ext = path.extname(filePath).toLowerCase();
+        const mimeTypes = {
+          ".mp3": "audio/mpeg",
+          ".html": "text/html",
+          ".css": "text/css",
+          ".js": "application/javascript",
+        };
+
+        const contentType = mimeTypes[ext] || "application/octet-stream";
+        res.writeHead(200, { "Content-Type": contentType });
+        fs.createReadStream(filePath).pipe(res);
+      } else {
+        res.writeHead(404);
+        res.end("404 Not Found");
+      }
+    });
   }
 });
 
 server.listen(3000, () => {
-  console.log("Servidor en http://localhost:3000");
+  console.log("Servidor en http://localhost:3000/");
 });

@@ -5,6 +5,48 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Lectura en Tiempo Real</title>
 </head>
+
+<script>
+  const muerte = new Audio("./muerte.mp3");
+  const revertir = new Audio("revertir.mp3");
+  let previousValue = null;
+
+  async function fetchData() {
+    const response = await fetch('/data');
+    const data = await response.json();
+    const numero = document.getElementById('content');
+    
+    if (data.contador !== previousValue) {
+      if(data.contador > previousValue && previousValue !== null){
+        muerte.currentTime = 0; 
+        muerte.play();
+      }
+      if(data.contador < previousValue){
+        revertir.currentTime = 0; 
+        revertir.play();
+      }
+    previousValue = data.contador;
+    numero.textContent = isNaN(data.contador) ? "-" : data.contador;
+    forceRedraw(numero);
+
+    // Añade la clase para la animación
+    numero.classList.add('animate');
+
+    // Elimina la clase después de la animación para que pueda reutilizarse
+    setTimeout(() => numero.classList.remove('animate'), 400);
+  }
+  }
+  setInterval(fetchData, 200); // Llama a fetchData cada segundo
+  fetchData(); // Llamada inicial para cargar el contenido
+
+  function forceRedraw(element) {
+  // Truco para forzar el redibujado
+  element.style.display = 'none';
+  element.offsetHeight; // Fuerza el recálculo de estilos
+  element.style.display = '';
+}
+</script>
+
 <body class="cont">
   <div class="box">
     <h1 class="titulo">Muertes</h1>
@@ -37,10 +79,10 @@
     }
     .box{
       background-color: rgb(17, 0, 31);
-      border: 15px solid;
-      border-image: linear-gradient(45deg, rgb(255, 0, 0), rgb(0, 255, 0), rgb(0, 0, 255)) 1;
+      border: 30px solid white;
       margin: auto;
       width: min-content;
+      
       padding: 20px 50px;
       display: flex;
       flex-direction: column;
@@ -75,7 +117,7 @@
     }
   }
 
-    @keyframes rgb-animation {
+    @keyframes rgb-animatio {
       0% {
         border-image-source: linear-gradient(45deg, rgb(104, 70, 255), rgb(104, 70, 255), rgb(206, 43, 255));
       }
@@ -92,27 +134,7 @@
     
   </style>
 
-  <script>
-    let previousValue = null;
-    async function fetchData() {
-      const response = await fetch('/data');
-      const text = await response.text();
-      const numero = document.getElementById('content');
-      
-      if (text !== previousValue) {
-      previousValue = text;
-      numero.textContent = isNaN(text) ? "-" : text;
 
-      // Añade la clase para la animación
-      numero.classList.add('animate');
-
-      // Elimina la clase después de la animación para que pueda reutilizarse
-      setTimeout(() => numero.classList.remove('animate'), 400);
-    }
-    }
-    setInterval(fetchData, 200); // Llama a fetchData cada segundo
-    fetchData(); // Llamada inicial para cargar el contenido
-  </script>
 
 
 
