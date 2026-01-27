@@ -1,12 +1,9 @@
 @echo off
-cd %~dp0
+cd /d %~dp0
 cd app
 
 REM Ejecutar server.js en segundo plano sin ventana
 start /B node server.js
-
-REM Abrir Chrome en nueva ventana
-start "" "C:\Program Files\Google\Chrome\Application\chrome.exe" --new-window http://localhost:3000/
 
 REM Ejecutar teclado.py mostrando su consola
 python teclado.py

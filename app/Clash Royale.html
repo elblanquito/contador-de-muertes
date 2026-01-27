@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lectura en Tiempo Real</title>
+</head>
+
+<script>
+  const muerte = new Audio("./muerte.mp3");
+  const revertir = new Audio("revertir.mp3");
+  let previousValue = null;
+
+  async function fetchData() {
+    const response = await fetch('/data');
+    const data = await response.json();
+    const numero = document.getElementById('content');
+    
+    if (data.contador !== previousValue) {
+      if(data.contador > previousValue && previousValue !== null){
+        muerte.currentTime = 0; 
+        muerte.play();
+      }
+      if(data.contador < previousValue){
+        revertir.currentTime = 0; 
+        revertir.play();
+      }
+    previousValue = data.contador;
+    numero.textContent = isNaN(data.contador) ? "-" : data.contador;
+    forceRedraw(numero);
+
+    // Añade la clase para la animación
+    numero.classList.add('animate');
+
+    // Elimina la clase después de la animación para que pueda reutilizarse
+    setTimeout(() => numero.classList.remove('animate'), 400);
+  }
+  }
+  setInterval(fetchData, 200); // Llama a fetchData cada segundo
+  fetchData(); // Llamada inicial para cargar el contenido
+
+  function forceRedraw(element) {
+  // Truco para forzar el redibujado
+  element.style.display = 'none';
+  element.offsetHeight; // Fuerza el recálculo de estilos
+  element.style.display = '';
+}
+</script>
+
+<body class="cont">
+  <div class="box">
+    <h1 class="titulo">Muertes:</h1>
+    <div id="content">0</div>
+  </div>
+
+  <div class="rgb-border"></div>
+  
+</body>
+
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Sour+Gummy:ital,wght@0,100..900;1,100..900&display=swap');
+  * {
+    font-family: "Sour Gummy", sans-serif;
+    font-size: large;
+    margin: 5px;
+    color: #ffffcc;
+    text-shadow:
+    4px 4px 0 #000,
+    -4px 4px 0 #000,
+    -3px -3px 0 #000,
+    3px -3px 0 #000;
+    letter-spacing: 0.2rem;
+    text-align: center;
+    user-select: none;
+    margin: 0px;
+    padding: 0px;
+    line-height: 1.0;
+    }
+    .cont{
+      background-color: rgb(0, 220, 0);
+      
+      height: 100vh;
+      display: flex;
+    }
+    .box{
+      position: relative;
+      background-color: rgb(40 143 233);
+      border: 20px solid #ffb937;
+      margin: auto;
+      width: min-content;
+      box-shadow: inset 0px 0px 10px 5px rgb(0, 93, 175);
+      
+      
+      padding: 20px 50px;
+      border-radius: 50px;
+      display: flex;
+      flex-direction: row;
+      gap: 20px
+    }
+    
+    .titulo{
+      font-size: 90px;
+      width: max-content;
+    }
+
+    #content{
+      font-size: 90px;
+      font-weight: bolder;
+      transition: all ease 0.5s;
+      width: min-content;
+      margin: auto; 
+      color: #ffd518;
+    }
+    #content.animate {
+    animation: pop 0.4s ease;
+  }
+
+    @keyframes pop {
+    0% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.5) rotate(10deg);
+    }
+    100% {
+      transform: scale(1);
+    }
+  }
+
+    @keyframes rgb-animatio {
+      0% {
+        border-image-source: linear-gradient(45deg, rgb(104, 70, 255), rgb(104, 70, 255), rgb(206, 43, 255));
+      }
+      33% {
+        border-image-source: linear-gradient(45deg, rgb(104, 70, 255), rgb(206, 43, 255), rgb(104, 70, 255));
+      }
+      66% {
+        border-image-source: linear-gradient(45deg, rgb(206, 43, 255), rgb(104, 70, 255), rgb(104, 70, 255));
+      }
+      100% {
+        border-image-source: linear-gradient(45deg, rgb(104, 70, 255), rgb(104, 70, 255), rgb(206, 43, 255));
+      }
+    }
+    
+  </style>
+
+
+
+
+
+
+</html>
