@@ -1,6 +1,5 @@
-<img width="333" height="288" alt="muerte furro" src="https://github.com/user-attachments/assets/a6ad24d0-6c2d-43b5-81fe-8424cae2629b" />
-<img width="576" height="288" alt="archivos" src="https://github.com/user-attachments/assets/d404267f-3233-4789-a0aa-25e0381db017" />
-
+<p align="center"> <img width="333" height="288" alt="muerte furro" src="https://github.com/user-attachments/assets/a6ad24d0-6c2d-43b5-81fe-8424cae2629b"/></p>
+<p align="center"><img width="576" height="288" alt="archivos" src="https://github.com/user-attachments/assets/d404267f-3233-4789-a0aa-25e0381db017"/></p>
 
 > [!TIP] 
 > ## Tutorial
